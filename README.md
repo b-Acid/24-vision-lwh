@@ -261,4 +261,4 @@ flower_names[str(preds)]
 print("Prediction:"+str(preds)+",True:"+filename[0])
 imshow(image1,title="PRED:{},TRUE:{}".format(preds,filename[0]))
 ```
-
+![图片](https://github.com/b-Acid/Images/blob/main/output.png?raw=true)
