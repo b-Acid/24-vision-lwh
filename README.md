@@ -91,7 +91,8 @@ int main()
     return 0;
 }
 ```
-
++ 效果图
+![图片1](https://github.com/b-Acid/Images/blob/main/armo.png?raw=true)
 
 ##  2.装甲板分类
 ### 分类原理
@@ -261,4 +262,4 @@ flower_names[str(preds)]
 print("Prediction:"+str(preds)+",True:"+filename[0])
 imshow(image1,title="PRED:{},TRUE:{}".format(preds,filename[0]))
 ```
-![图片](https://github.com/b-Acid/Images/blob/main/output.png?raw=true)
+![图片2](https://github.com/b-Acid/Images/blob/main/output.png?raw=true)
