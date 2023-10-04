@@ -91,9 +91,8 @@ int main()
     return 0;
 }
 ```
-+ 效果图
-+ 
-![图片1](https://github.com/b-Acid/Images/blob/main/armo.png?raw=true)
++ 效果图: 
++ ![图片1](https://github.com/b-Acid/Images/blob/main/armo.png?raw=true)
 
 ##  2.装甲板分类
 ### 分类原理
