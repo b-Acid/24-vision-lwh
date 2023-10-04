@@ -227,7 +227,7 @@ ResNet(
 #### 模型调用
 
 + 图像预处理
-+ 神经网络接受80*80且已经归一化的矩阵，所有要对图像预处理，预处理函数如下：
++ 神经网络接受3*80*80且已经归一化的矩阵，所以要对图像预处理，预处理函数如下：
 ```python
 def process_image(image_path):
     img=Image.open(image_path)
