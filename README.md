@@ -92,7 +92,7 @@ int main()
 }
 ```
 + 效果图: 
-+ ![图片1](https://github.com/b-Acid/Images/blob/main/armo.png?raw=true)
++ ![装甲板效果图](https://github.com/b-Acid/Images/blob/main/armo.png?raw=true)
 
 ##  2.装甲板分类
 ### 分类原理
@@ -129,11 +129,13 @@ data_transfroms = {
 
 }
 ```
++ 训练集图片
++ ![训练集图片](https://github.com/b-Acid/Images/blob/main/train.png?raw=true)
 
 
 
 #### 网络初始化
-+ 本处调用torchvision从官网下载并搭建了了resnet18。
++ 本处调用torchvision从官网下载并搭建了了resnet18。由于本任务是6分类任务，将resnet18的最后一层变为512*6的全连接层，并添加一层softmax层来得到输出类别序号。
 ```python
 ResNet(
   (conv1): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
@@ -262,4 +264,4 @@ flower_names[str(preds)]
 print("Prediction:"+str(preds)+",True:"+filename[0])
 imshow(image1,title="PRED:{},TRUE:{}".format(preds,filename[0]))
 ```
-![图片2](https://github.com/b-Acid/Images/blob/main/output.png?raw=true)
+![识别效果图](https://github.com/b-Acid/Images/blob/main/output.png?raw=true)
