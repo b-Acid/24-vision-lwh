@@ -92,6 +92,7 @@ int main()
 }
 ```
 + 效果图
++ 
 ![图片1](https://github.com/b-Acid/Images/blob/main/armo.png?raw=true)
 
 ##  2.装甲板分类
