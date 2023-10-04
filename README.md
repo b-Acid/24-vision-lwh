@@ -1,6 +1,6 @@
 # 24-vision-lwh
 
-## 1.装甲板识别
+##  1.装甲板识别
 ### 识别原理
 + 1.对图像进行通道分离，分为BGR三个通道。
 + 2.按探测颜色对对应通道的图像进行二值化。
@@ -47,13 +47,13 @@ private:
     float lightdescriptor_length_width_ratio[2];//单灯条的长宽比阈值
     float angle_diff;//角度差上限，单位度
     float length_diff;//两灯条长度偏差阈值
-    float armored_plate_area;//装甲板面积下限，单位像素
+    float lightescriptor_area;//装甲板面积下限，单位像素
     float armored_plate_length_width_ratio[2];//装甲板的长宽比阈值
     string filename;//文件名
 public:
     detector() {};
 
-    detector(int color,int threshold,float* lightdescriptor_length_width_ratio,float angle_diff,float length_diff,float armored_plate_area,float* armored_plate_length_width_ratio,string filename="null")
+    detector(int color,int threshold,float* lightdescriptor_length_width_ratio,float angle_diff,float length_diff,float lightescriptor_area,float* armored_plate_length_width_ratio,string filename="null")
     {
         this->color=color;
         this->threshold=threshold;
@@ -70,4 +70,35 @@ public:
     void detect();
 }
 ```
-+ 使用dectecor类时，首先将其实例化，然后传入参数初始化detector类，直接调用detector.detect()开始识别，识别得到的文件将保存到同目录下的output.mp4。
++ 使用dectecor类时，首先将其实例化，然后传入参数初始化detector类，直接调用detector.detect()开始识别，识别得到的文件将保存到同目录下的output.mp4。一个具体的例子如下：
++ 本例子中设置了探测器dec识别红色，阈值140，灯柱长宽比上下限分别为1和5，角度差最大值3°，长度差最多20%，灯柱最小面积20个像素，装甲板长宽比上下限分别为1和5。然后调用dec.detect()识别“testvideo.avi”中的装甲板
+
+```C++
+int main()
+{
+    int color =0;//识别红色
+    int threshold=140;
+    float lightdescriptor_length_width_ratio[2]={1,5};
+    float angle_diff=3;
+    float length_diff=0.2;
+    float lightescriptor_area=20;
+    float armored_plate_length_width_ratio[2]={1,4};
+
+
+    detector dec(color,threshold,lightdescriptor_length_width_ratio,angle_diff,length_diff,lightescriptor_area,armored_plate_length_width_ratio,"testvideo.avi");
+    dec.detect();
+    return 0;
+}
+```
+
+
+##  2.装甲板分类
+### 分类原理
++ 1.用pytorch调用已经被广泛运用的resnet18，将数据集按照训练集：验证集=8：1进行训练。
++ 2.在RTX3060上训练15分钟，验证集上的准确率已达100%，这时训练集上准确率为97%。
++ 3.保存训练好的模型为ArmoClassificacion.pth,大小为134MB
+### 改进
++ 1.数据集中的样本过于单调，导致了过拟合现象，模型在网上下载的随机图片上的识别表现并不好。
++ 2.模型还是比较大，resnet18中包含了两位数个卷积层，偏复杂。可以试试魔改resnet18，减少几个层。
+
+
