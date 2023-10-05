@@ -25,6 +25,6 @@ add_subdirectory(modules)  #
 # 在此处生成可执行程序
 link_libraries(common modules)
 add_executable(main main.cpp)
-
+target_link_libraries(test PUBLIC ${OpenCV_LIBS})
 
 
