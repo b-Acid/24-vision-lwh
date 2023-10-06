@@ -1,184 +1,122 @@
-##  2.装甲板分类
+# SSH任务
 
-### 分类原理
+## 一、简述
 
-1. 用pytorch调用已经被广泛运用的resnet18，将数据集按照训练集：验证集=8：1进行训练。
-2. 在RTX3060上训练15分钟，验证集上的准确率已达100%，这时训练集上准确率为97%。
-3. 保存训练好的模型为ArmoClassificacion.pth,大小为134MB
+通过SSH远程链接实现在两台电脑之间传输文件，并学习SSH相关软件的安装和配置。
 
-### 改进
+## 操作环境
 
-1. 数据集中的样本过于单调，导致了过拟合现象，模型在网上下载的随机图片上的识别表现并不好。
-2. 模型还是比较大，resnet18中包含了两位数个卷积层，偏复杂。可以试试魔改resnet18，减少几个层。
+- 操作系统：Ubuntu 20.04 LTS
+- SSH软件：OpenSSH
+- 电脑1 IP地址：192.168.188.36 用户 bacid
+- 电脑2 IP地址：192.168.188.57 用户 taylor
 
-### Classify.ipynb
+## 二、具体操作
 
-+ 基于torch2.0.1+cuda11.7+torchvision0.15.2
-
-#### 训练图像预处理：
-
-+ 训练集随机旋转45°，增加亮度至150%，每个像素点以均值和方差均为0.5进行归一化。
-+ 验证集只做每个像素点均值和方差均为0.5的归一化。
-
-```python
-data_transfroms = { 
-    'train':transforms.Compose([
-        transforms.RandomRotation(45),##随机转45°
-        #transforms.CenterCrop(),##中心剪裁
-        ##transforms.RandomHorizontalFlip(p=0.5),##随机水平镜像
-        ##transforms.RandomVerticalFlip(p=0.5),##随机垂直镜像
-        ##transforms.ColorJitter(brightness=1.5,contrast=1),
-        transforms.ToTensor(),
-        transforms.Normalize([0.5,0.5,0.5],[0.5,0.5,0.5])
-    ]),
-    'valid':transforms.Compose([
-        #transforms.Resize(256),##调整大小
-        #transforms.CenterCrop(80),##中心剪裁
-        transforms.ToTensor(),
-        transforms.Normalize([0.5,0.5,0.5],[0.5,0.5,0.5])
-    ])
-
-}
+### 1.安装OpenSSH
++ 两台电脑都是Ubuntu 20.04 LTS，没有预装openssh，执行如下命令完成安装：
 ```
-
-+ 训练集图片
-+ ![训练集图片](https://github.com/b-Acid/Images/blob/main/train.png?raw=true)
-
-
-
-#### 网络初始化
-
-+ 本处调用torchvision从官网下载并搭建了了resnet18。由于本任务是6分类任务，将resnet18的最后一层变为512*6的全连接层，并添加一层softmax层来得到输出类别序号。
-
-```python
-ResNet(
-  (conv1): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
-  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-  (relu): ReLU(inplace=True)
-  (maxpool): MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
-  (layer1): Sequential(
-    (0): BasicBlock(
-      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
-    (1): BasicBlock(
-      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
-  )
-  (layer2): Sequential(
-    (0): BasicBlock(
-      (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (downsample): Sequential(
-        (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
-        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      )
-    )
-    (1): BasicBlock(
-      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
-  )
-  (layer3): Sequential(
-    (0): BasicBlock(
-      (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (downsample): Sequential(
-        (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
-        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      )
-    )
-    (1): BasicBlock(
-      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
-  )
-  (layer4): Sequential(
-    (0): BasicBlock(
-      (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (downsample): Sequential(
-        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
-        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      )
-    )
-    (1): BasicBlock(
-      (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
-  )
-  (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
-  (fc): Sequential(
-    (0): Linear(in_features=512, out_features=6, bias=True)
-    (1): LogSoftmax(dim=1)
-  )
-)
+sudo apt update
+sudo apt install openssh-server
 ```
 
 
-#### 模型调用
+### 2.确认ip并连接两台电脑至同一个局域网
+分别在两台电脑的终端上执行如下命令查看本机ip：
+```
+ifconfig
+```
+在两台电脑上分别打开终端，确保两台电脑连接在同一局域网中。这里我使用的是自己的手机热点。
 
-+ 图像预处理
-+ 神经网络接受3 * 80 * 80且已经归一化的矩阵，所以要对图像预处理，预处理函数如下：
-
-```python
-def process_image(image_path):
-    img=Image.open(image_path)
-
-    img=img.resize((80,80))
-
-    img=np.array(img)/255
-
-    mean=np.array([0.5,0.5,0.5])
-
-    std=np.array([0.5,0.5,0.5])
-
-    img=(img-mean)/std
-
-    img=img.transpose((2,0,1))
-
-    return img
+### 3.生成公钥和私钥
+执行如下命令生成密钥：
+```
+ssh-keygen
+```
+输出如下：在Enter passphrase行输入要设置的密码并再输一次确认。
+```
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/user/.ssh/id_rsa):
+Created directory '/home/user/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/user/.ssh/id_rsa.
+Your public key has been saved in /home/user/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:47VkvSjlFhKRgz/6RYdXM2EULtk9TQ65PDWJjYC5Jys user@local
+The key's randomart image is:
++---[RSA 2048]----+
+|       ...o...X+o|
+|      . o+   B=Oo|
+|       .....ooo*=|
+|        o+ooo.+ .|
+|       .SoXo.  . |
+|      .E X.+ .   |
+|       .+.= .    |
+|        .o       |
+|                 |
++----[SHA256]-----+
+```
+这个输出表明，生成的公钥放在了 ~/.ssh/id_rsa.pub，私钥放在了 ~/.ssh/id_rsa。接下来，把公钥发送给远程机器，让远程机器记住本机的公钥。
+执行如下命令发送公钥：
+```
+ssh-copy-id user@remote -p port
 ```
 
-+ 模型调用
-
-```python
-filename="3.png"
-image1=process_image(filename)
+这里user是对方的用户名，remote是ip。分别在两台电脑上执行上述命令，生成公钥并发送给对方。
 
 
-output = model_ft(torch.unsqueeze(torch.FloatTensor(image1),0).to(device))
-_,preds_tensor=torch.max(output,1)
-preds=np.squeeze(preds_tensor.cpu().numpy())
-flower_names[str(preds)]
 
-print("Prediction:"+str(preds)+",True:"+filename[0])
-imshow(image1,title="PRED:{},TRUE:{}".format(preds,filename[0]))
+
+### 4.通过SSH在电脑1上登录电脑2
+
+在电脑1上，使用以下命令通过SSH登录电脑2：
 ```
+ssh taylor@192.168.188.57
+```
+输入刚刚设置密码后即成功登录电脑2。
 
-![识别效果图](https://github.com/b-Acid/Images/blob/main/output.png?raw=true)
+### 5.创建文件夹和文件
+
+  在电脑1上，登录成功电脑2后可以看到终端前面的标头已经变成taylor@@192.168.188.57  使用以下命令创建文件夹和文件并用vim写入内容：
+```
+cd Documents
+mkdir test
+cd test
+touch test.txt
+vim test.txt
+```
+### 6.修改SSH配置文件
+
+  在电脑1上，使用以下命令修改SSH配置文件：
+```
+vim ~/.ssh/config
+```
+在文件中加以下内容：
+```
+Host TTT
+  Hostname 192.168.188.57
+  User taylor
+```
+其中，TTT为电脑2的别名，taylor为电脑2的用户名。这样就实现了通过别名快速登录电脑2的操作。之后要登录电脑2只需要执行如下命令：
+```
+ssh TTT
+```
+就实现了免密登录。
+  
+###  7.通过SCP命令传输文件
+
+在电脑1上，使用以下命令将本机的testvideo.avi文件拷贝至电脑2：
+```
+scp  testvideo.avi taylolr@192.168.188.57:/home/Documents/
+```
+在电脑2上的Documents里已经可以看到刚刚传送过来的名为testvideo.avi的文件。  
+
+
+在电脑1上，使用以下命令将本机的testvideos文件夹拷贝至电脑2：
+```
+scp  testvideos taylolr@192.168.188.57:/home/Documents/
+```
+在电脑2上的Documents里已经可以看到刚刚传送过来的名为videos的文件夹。
+
+
