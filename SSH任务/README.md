@@ -26,6 +26,12 @@ sudo apt install openssh-server
 ```
 ifconfig
 ```
+![ip](https://github.com/b-Acid/24-vision-lwh/blob/main/SSH%E4%BB%BB%E5%8A%A1/ip.png?raw=true)
+
+
+可以看到电脑1的ip是192.168.43.81（这是在宿舍连的校园网得到的ip，不同局域网下ip可能不同，接下来的操作所连的局域网下电脑1的ip是192.168.188.36）  
+
+
 在两台电脑上分别打开终端，确保两台电脑连接在同一局域网中。这里我使用的是自己的手机热点。
 
 ### 3.生成公钥和私钥
