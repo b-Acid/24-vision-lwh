@@ -108,7 +108,7 @@ Host TTT
 ```
 ssh TTT
 ```
-就实现了免密登录。
+这样就实现了免密登录。
   
 ###  7.通过SCP命令传输文件
 
@@ -123,6 +123,6 @@ scp  testvideo.avi taylolr@192.168.188.57:/home/Documents/
 ```
 scp  testvideos taylolr@192.168.188.57:/home/Documents/
 ```
-在电脑2上的Documents里已经可以看到刚刚传送过来的名为videos的文件夹。
+在电脑2上的Documents里已经可以看到刚刚传送过来的名为testvideos的文件夹。
 
 
