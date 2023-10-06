@@ -90,4 +90,4 @@ int main()
 }
 ```
 + 效果图: 
-+ ![装甲板效果图](https://github.com/b-Acid/Images/blob/main/armo.png?raw=true)
++ ![装甲板效果图](https://github.com/b-Acid/24-vision-lwh/blob/main/%E8%A3%85%E7%94%B2%E6%9D%BF%E8%AF%86%E5%88%AB/output.png?raw=true)
