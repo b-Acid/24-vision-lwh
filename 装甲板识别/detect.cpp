@@ -194,7 +194,7 @@ public:
                 if (area < lightescriptor_area || contours[i].size() <= 1)
                     continue;//太小了或者识别到的矩形亮块小于2块
 
-            // 用椭圆拟合区域得到外接矩形（特殊的处理方式：因为灯条是椭圆型的，所以用椭圆去拟合轮廓，再直接获取旋转外接矩形即可）
+            // 用椭圆拟合区域得到外接矩形
                 RotatedRect Light_Rec = fitEllipse(contours[i]);
             // 长宽比限制
                 if (Light_Rec.size.height / Light_Rec.size.width > lightdescriptor_length_width_ratio[1]||Light_Rec.size.height / Light_Rec.size.width < lightdescriptor_length_width_ratio[0])
