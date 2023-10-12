@@ -69,30 +69,30 @@ include CMakeFiles/yourproject.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/yourproject.dir/flags.make
 
-CMakeFiles/yourproject.dir/test.cpp.o: CMakeFiles/yourproject.dir/flags.make
-CMakeFiles/yourproject.dir/test.cpp.o: /home/bacid/文档/code/10.5/test.cpp
-CMakeFiles/yourproject.dir/test.cpp.o: CMakeFiles/yourproject.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bacid/文档/code/10.5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/yourproject.dir/test.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/yourproject.dir/test.cpp.o -MF CMakeFiles/yourproject.dir/test.cpp.o.d -o CMakeFiles/yourproject.dir/test.cpp.o -c /home/bacid/文档/code/10.5/test.cpp
+CMakeFiles/yourproject.dir/onnx_detect.cpp.o: CMakeFiles/yourproject.dir/flags.make
+CMakeFiles/yourproject.dir/onnx_detect.cpp.o: /home/bacid/文档/code/10.5/onnx_detect.cpp
+CMakeFiles/yourproject.dir/onnx_detect.cpp.o: CMakeFiles/yourproject.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bacid/文档/code/10.5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/yourproject.dir/onnx_detect.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/yourproject.dir/onnx_detect.cpp.o -MF CMakeFiles/yourproject.dir/onnx_detect.cpp.o.d -o CMakeFiles/yourproject.dir/onnx_detect.cpp.o -c /home/bacid/文档/code/10.5/onnx_detect.cpp
 
-CMakeFiles/yourproject.dir/test.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/yourproject.dir/test.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bacid/文档/code/10.5/test.cpp > CMakeFiles/yourproject.dir/test.cpp.i
+CMakeFiles/yourproject.dir/onnx_detect.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/yourproject.dir/onnx_detect.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bacid/文档/code/10.5/onnx_detect.cpp > CMakeFiles/yourproject.dir/onnx_detect.cpp.i
 
-CMakeFiles/yourproject.dir/test.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/yourproject.dir/test.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bacid/文档/code/10.5/test.cpp -o CMakeFiles/yourproject.dir/test.cpp.s
+CMakeFiles/yourproject.dir/onnx_detect.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/yourproject.dir/onnx_detect.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bacid/文档/code/10.5/onnx_detect.cpp -o CMakeFiles/yourproject.dir/onnx_detect.cpp.s
 
 # Object files for target yourproject
 yourproject_OBJECTS = \
-"CMakeFiles/yourproject.dir/test.cpp.o"
+"CMakeFiles/yourproject.dir/onnx_detect.cpp.o"
 
 # External object files for target yourproject
 yourproject_EXTERNAL_OBJECTS =
 
-yourproject: CMakeFiles/yourproject.dir/test.cpp.o
+yourproject: CMakeFiles/yourproject.dir/onnx_detect.cpp.o
 yourproject: CMakeFiles/yourproject.dir/build.make
-yourproject: /home/bacid/文档/onnxruntime/lib/libonnxruntime.so
+yourproject: /usr/local/lib/libonnxruntime.so
 yourproject: /usr/local/lib/libopencv_highgui.so.4.7.0
 yourproject: /usr/local/lib/libopencv_ml.so.4.7.0
 yourproject: /usr/local/lib/libopencv_objdetect.so.4.7.0

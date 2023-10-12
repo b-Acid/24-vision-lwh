@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/yourproject.dir/test.cpp.o"
-  "CMakeFiles/yourproject.dir/test.cpp.o.d"
+  "CMakeFiles/yourproject.dir/onnx_detect.cpp.o"
+  "CMakeFiles/yourproject.dir/onnx_detect.cpp.o.d"
   "yourproject"
   "yourproject.pdb"
 )

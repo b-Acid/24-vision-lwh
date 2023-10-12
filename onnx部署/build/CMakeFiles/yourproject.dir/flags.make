@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/g++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/bacid/文档/onnxruntime/include -isystem /usr/local/include/opencv4
+CXX_INCLUDES = -I/usr/local/cuda/include -I/usr/local/include/onnxruntime/core -isystem /usr/local/include/opencv4
 
 CXX_FLAGS = -std=c++11 -g -std=gnu++11
 

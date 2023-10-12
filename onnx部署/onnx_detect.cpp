@@ -3,7 +3,7 @@
 #include <iostream>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
-//#include <cuda_provider_factory.h>   // 提供cuda加速
+#include <cuda_provider_factory.h>   // 提供cuda加速
 #include <onnxruntime_cxx_api.h>	 // C或c++的api
  
 // 命名空间
@@ -32,17 +32,7 @@ typedef struct BoxInfo
 	int label;
 } BoxInfo;
  
-// int endsWith(string s, string sub) {
-// 	return s.rfind(sub) == (s.length() - sub.length()) ? 1 : 0;
-// }
- 
-// const float anchors_640[3][6] = { {10.0,  13.0, 16.0,  30.0,  33.0,  23.0},
-// 								 {30.0,  61.0, 62.0,  45.0,  59.0,  119.0},
-// 								 {116.0, 90.0, 156.0, 198.0, 373.0, 326.0} };
- 
-// const float anchors_1280[4][6] = { {19, 27, 44, 40, 38, 94},{96, 68, 86, 152, 180, 137},{140, 301, 303, 264, 238, 542},
-// 					   {436, 615, 739, 380, 925, 792} };
- 
+
 class YOLOv5
 {
 public:
@@ -81,7 +71,6 @@ private:
 	Env env = Env(ORT_LOGGING_LEVEL_ERROR, "yolov5-6.1"); // 初始化环境
 	Session *ort_session = nullptr;    // 初始化Session指针选项
 	SessionOptions sessionOptions = SessionOptions();  //初始化Session对象
-	//SessionOptions sessionOptions;
 	vector<char*> input_names;  // 定义一个字符指针vector
 	vector<char*> output_names; // 定义一个字符指针vector
 	vector<vector<int64_t>> input_node_dims; // >=1 outputs  ，二维vector
@@ -100,13 +89,17 @@ YOLOv5::YOLOv5(Configuration config)
 	string model_path = config.modelpath;
 	//std::wstring widestr = std::wstring(model_path.begin(), model_path.end());  //用于UTF-16编码的字符
  
-	//gpu, https://blog.csdn.net/weixin_44684139/article/details/123504222
-	//CUDA加速开启
-   // OrtSessionOptionsAppendExecutionProvider_CUDA(sessionOptions, 0);
- 
+	//CUDA
+	OrtCUDAProviderOptions cuda_options{
+          0,
+          OrtCudnnConvAlgoSearch::EXHAUSTIVE,
+          std::numeric_limits<size_t>::max(),
+          0,
+          true
+      };
+	sessionOptions.AppendExecutionProvider_CUDA(cuda_options);
+
 	sessionOptions.SetGraphOptimizationLevel(ORT_ENABLE_BASIC);  //设置图优化类型
-	//ort_session = new Session(env, widestr.c_str(), sessionOptions);  // 创建会话，把模型加载到内存中
-	//ort_session = new Session(env, (const ORTCHAR_T*)model_path.c_str(), sessionOptions); // 创建会话，把模型加载到内存中
 	ort_session = new Session(env, (const char*)model_path.c_str(), sessionOptions);
 	size_t numInputNodes = ort_session->GetInputCount();  //输入输出节点数量                         
 	size_t numOutputNodes = ort_session->GetOutputCount(); 
@@ -220,7 +213,6 @@ void YOLOv5::nms(vector<BoxInfo>& input_boxes)
 	}
 	// return post_nms;
 	int idx_t = 0;
-       // remove_if()函数 remove_if(beg, end, op) //移除区间[beg,end)中每一个“令判断式:op(elem)获得true”的元素
 	input_boxes.erase(remove_if(input_boxes.begin(), input_boxes.end(), [&idx_t, &isSuppressed](const BoxInfo& f) { return isSuppressed[idx_t++]; }), input_boxes.end());
 }
  
@@ -244,7 +236,6 @@ void YOLOv5::detect(Mat& frame)
 	float* pdata = ort_outputs[0].GetTensorMutableData<float>(); // GetTensorMutableData
 	for(int i = 0; i < num_proposal; ++i) // 遍历所有的num_pre_boxes
 	{
-		//nout=85    cx,cy,w,h,box_score,class_score1,class_score2,.....,class_score80
 		int index = i * nout;      // prob[b*num_pred_boxes*(classes+5)]  
 		float obj_conf = pdata[index + 4];  // 置信度分数
 		if (obj_conf > this->objThreshold)  // 大于阈值
@@ -278,9 +269,7 @@ void YOLOv5::detect(Mat& frame)
 		}
 	}
  
-	// Perform non maximum suppression to eliminate redundant overlapping boxes with
-	// lower confidences
-	nms(generate_boxes);
+	nms(generate_boxes);//非极大值抑制
 	for (size_t i = 0; i < generate_boxes.size(); ++i)
 	{
 		int xmin = int(generate_boxes[i].x1);
@@ -294,25 +283,48 @@ void YOLOv5::detect(Mat& frame)
  
 int main(int argc,char *argv[])
 {
-	clock_t startTime,endTime; //计算时间
-	VideoCapture cap("7.mp4");
-	Configuration yolo_nets = { 0.3, 0.5, 0.3,"yolov5s.onnx" };
+	clock_t startTime,endTime; //计算时间用的
+	VideoCapture cap("test.mp4");//"test.mp4"
+	Configuration yolo_nets = { 0.3, 0.5, 0.6,"yolov5s.onnx" };
 	YOLOv5 yolo_model(yolo_nets);
-	string imgpath = "2.jpg";
 	Mat srcimg ;
-	while(waitKey(10)!=27)
+	int Fps;
+	string s;
+	namedWindow("rusult", WINDOW_FREERATIO);
+
+
+	VideoWriter writer;//写文件的类
+        int codec=VideoWriter::fourcc('m','p','4','v');//输出视频格式
+        double fps=30;//输出视频帧数
+        string name="output.mp4";//输出视频名称
+        cap>>srcimg;//读取视频一帧确定分辨率
+        int frameH    = (int) srcimg.rows;
+	    int frameW    = (int) srcimg.cols; 
+        Point2d a = Point2d(0,frameH/2);
+        Point2d b = Point2d(frameW,frameH/2);
+        cout<<frameH<<frameW<<endl;
+        writer.open(name,codec,fps,srcimg.size(),1);
+
+
+
+
+	while(waitKey(1)!=27)
 	{
-		cap.read(srcimg);
+		cap>>srcimg;
+		if(srcimg.empty())break;
 		startTime = clock();//计时开始	
 		yolo_model.detect(srcimg);
 		endTime = clock();//计时结束
-		cout << "running time is:" <<(double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << endl;
+		Fps = (int)(CLOCKS_PER_SEC / (double)(endTime - startTime));
+		//cout <<"   "<< Fps << "帧" << endl;
+        s = to_string(Fps)+"fps"+"      "+to_string((float)(1)/Fps);
+        putText(srcimg, s, Point(0, 25), FONT_HERSHEY_COMPLEX, 1.0, Scalar(255, 255, 255), 1, 8);
 		imshow("rusult",srcimg);
-		imwrite("restult_ort.jpg",srcimg);
-		
-
+		writer.write(srcimg);
 	}
-	
+
+	cap.release();
+	writer.release();
 	destroyAllWindows();
 	return 0;
 }

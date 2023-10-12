@@ -117,41 +117,41 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named yourproject
+# Target rules for targets named test
 
 # Build rule for target.
-yourproject: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 yourproject
-.PHONY : yourproject
+test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test
+.PHONY : test
 
 # fast build rule for target.
-yourproject/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/yourproject.dir/build.make CMakeFiles/yourproject.dir/build
-.PHONY : yourproject/fast
+test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
+.PHONY : test/fast
 
-test.o: test.cpp.o
-.PHONY : test.o
+onnx_detect.o: onnx_detect.cpp.o
+.PHONY : onnx_detect.o
 
 # target to build an object file
-test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/yourproject.dir/build.make CMakeFiles/yourproject.dir/test.cpp.o
-.PHONY : test.cpp.o
+onnx_detect.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/onnx_detect.cpp.o
+.PHONY : onnx_detect.cpp.o
 
-test.i: test.cpp.i
-.PHONY : test.i
+onnx_detect.i: onnx_detect.cpp.i
+.PHONY : onnx_detect.i
 
 # target to preprocess a source file
-test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/yourproject.dir/build.make CMakeFiles/yourproject.dir/test.cpp.i
-.PHONY : test.cpp.i
+onnx_detect.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/onnx_detect.cpp.i
+.PHONY : onnx_detect.cpp.i
 
-test.s: test.cpp.s
-.PHONY : test.s
+onnx_detect.s: onnx_detect.cpp.s
+.PHONY : onnx_detect.s
 
 # target to generate assembly for a file
-test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/yourproject.dir/build.make CMakeFiles/yourproject.dir/test.cpp.s
-.PHONY : test.cpp.s
+onnx_detect.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/onnx_detect.cpp.s
+.PHONY : onnx_detect.cpp.s
 
 # Help Target
 help:
@@ -161,10 +161,10 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... yourproject"
-	@echo "... test.o"
-	@echo "... test.i"
-	@echo "... test.s"
+	@echo "... test"
+	@echo "... onnx_detect.o"
+	@echo "... onnx_detect.i"
+	@echo "... onnx_detect.s"
 .PHONY : help
 
 

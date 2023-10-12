@@ -14,6 +14,15 @@
 # EXTERNAL cache entries
 ########################
 
+//Value Computed by CMake
+666_BINARY_DIR:STATIC=/home/bacid/文档/code/10.5/build
+
+//Value Computed by CMake
+666_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+666_SOURCE_DIR:STATIC=/home/bacid/文档/code/10.5
+
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 
@@ -147,7 +156,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=yourproject
+CMAKE_PROJECT_NAME:STATIC=test
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -356,8 +365,35 @@ CUDA_nvToolsExt_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnvToolsExt.so
 //Path to a library.
 CUDA_rt_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/librt.so
 
+//The directory containing a CMake configuration file for ONNX.
+ONNX_DIR:PATH=ONNX_DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for Onnxruntime.
+Onnxruntime_DIR:PATH=Onnxruntime_DIR-NOTFOUND
+
 //The directory containing a CMake configuration file for OpenCV.
 OpenCV_DIR:PATH=/usr/local/lib/cmake/opencv4
+
+//Value Computed by CMake
+Project_BINARY_DIR:STATIC=/home/bacid/文档/code/10.5/build
+
+//Value Computed by CMake
+Project_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+Project_SOURCE_DIR:STATIC=/home/bacid/文档/code/10.5
+
+//The directory containing a CMake configuration file for onnxruntime.
+onnxruntime_DIR:PATH=onnxruntime_DIR-NOTFOUND
+
+//Value Computed by CMake
+test_BINARY_DIR:STATIC=/home/bacid/文档/code/10.5/build
+
+//Value Computed by CMake
+test_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+test_SOURCE_DIR:STATIC=/home/bacid/文档/code/10.5
 
 //Value Computed by CMake
 yourproject_BINARY_DIR:STATIC=/home/bacid/文档/code/10.5/build
