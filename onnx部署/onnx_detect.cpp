@@ -11,7 +11,7 @@ using namespace std;
 using namespace cv;
 using namespace Ort;
  
-// 自定义配置结构
+// 自定义配置结构体
 struct Configuration
 {
 	public: 
@@ -21,7 +21,7 @@ struct Configuration
 	string modelpath;
 };
  
-// 定义BoxInfo结构类型
+// 定义BoxInfo结构类型，画框用
 typedef struct BoxInfo
 {
 	float x1;
@@ -32,7 +32,7 @@ typedef struct BoxInfo
 	int label;
 } BoxInfo;
  
-
+//yolov5类
 class YOLOv5
 {
 public:
@@ -41,12 +41,12 @@ public:
 private:
 	float confThreshold;
 	float nmsThreshold;
-	float objThreshold;
+	float objThreshold;//三个配置量，也就是三个阈值
 	int inpWidth;
-	int inpHeight;
-	int nout;
-	int num_proposal;
-	int num_classes;
+	int inpHeight;//输入长宽
+	int nout;//输出的数据帧长度，这里是是4+1+80：对象中心xy，长宽wh，全局置信度（是一个对象的置信度），每个类别的置信度
+	int num_proposal;//探测到的类box数
+	int num_classes;//所有类别，也就是下面这80个
 	string classes[80] = {"person", "bicycle", "car", "motorbike", "aeroplane", "bus",
 							"train", "truck", "boat", "traffic light", "fire hydrant",
 							"stop sign", "parking meter", "bench", "bird", "cat", "dog",
@@ -65,8 +65,8 @@ private:
 	const bool keep_ratio = true;
 	vector<float> input_image_;		// 输入图片
 	void normalize_(Mat img);		// 归一化函数
-	void nms(vector<BoxInfo>& input_boxes);  
-	Mat resize_image(Mat srcimg, int *newh, int *neww, int *top, int *left);
+	void nms(vector<BoxInfo>& input_boxes);  //非极大值抑制函数
+	Mat resize_image(Mat srcimg, int *newh, int *neww, int *top, int *left);//resize输入函数
  
 	Env env = Env(ORT_LOGGING_LEVEL_ERROR, "yolov5-6.1"); // 初始化环境
 	Session *ort_session = nullptr;    // 初始化Session指针选项
@@ -77,19 +77,21 @@ private:
 	vector<vector<int64_t>> output_node_dims; // >=1 outputs ,int64_t C/C++标准
 };
  
+
+
+//构造函数
 YOLOv5::YOLOv5(Configuration config)
 {
 	this->confThreshold = config.confThreshold;
 	this->nmsThreshold = config.nmsThreshold;
 	this->objThreshold = config.objThreshold;
 	this->num_classes = sizeof(this->classes)/sizeof(this->classes[0]);  // 类别数量
-	this->inpHeight = 640;
-	this->inpWidth = 640;
+	this->inpHeight = 360;
+	this->inpWidth = 360;//输入图片大小，可以调小点加速，也可以设置为原图大小
 	
-	string model_path = config.modelpath;
-	//std::wstring widestr = std::wstring(model_path.begin(), model_path.end());  //用于UTF-16编码的字符
+	string model_path = config.modelpath;//模型路径
  
-	//CUDA
+	//CUDA设置
 	OrtCUDAProviderOptions cuda_options{
           0,
           OrtCudnnConvAlgoSearch::EXHAUSTIVE,
@@ -99,16 +101,18 @@ YOLOv5::YOLOv5(Configuration config)
       };
 	sessionOptions.AppendExecutionProvider_CUDA(cuda_options);
 
+
+
 	sessionOptions.SetGraphOptimizationLevel(ORT_ENABLE_BASIC);  //设置图优化类型
-	ort_session = new Session(env, (const char*)model_path.c_str(), sessionOptions);
+	ort_session = new Session(env, (const char*)model_path.c_str(), sessionOptions);//应用设置
 	size_t numInputNodes = ort_session->GetInputCount();  //输入输出节点数量                         
-	size_t numOutputNodes = ort_session->GetOutputCount(); 
+	size_t numOutputNodes = ort_session->GetOutputCount(); //输出输出节点数量  
 	AllocatorWithDefaultOptions allocator;   // 配置输入输出节点内存
 	for (int i = 0; i < numInputNodes; i++)
 	{
 		input_names.push_back(ort_session->GetInputName(i, allocator));		// 内存
 		Ort::TypeInfo input_type_info = ort_session->GetInputTypeInfo(i);   // 类型
-		auto input_tensor_info = input_type_info.GetTensorTypeAndShapeInfo();  // 
+		auto input_tensor_info = input_type_info.GetTensorTypeAndShapeInfo();   
 		auto input_dims = input_tensor_info.GetShape();    // 输入shape
 		input_node_dims.push_back(input_dims);	// 保存
 	}
@@ -120,13 +124,15 @@ YOLOv5::YOLOv5(Configuration config)
 		auto output_dims = output_tensor_info.GetShape();
 		output_node_dims.push_back(output_dims);
 	}
-	this->inpHeight = input_node_dims[0][2];
-	this->inpWidth = input_node_dims[0][3];
-	this->nout = output_node_dims[0][2];      // 5+classes
-	this->num_proposal = output_node_dims[0][1];  // pre_box
+	this->inpHeight = input_node_dims[0][2];	//
+	this->inpWidth = input_node_dims[0][3];		//长宽
+	this->nout = output_node_dims[0][2];      //输出的数据帧长度，这里是是4+80：对象中心xy，长宽wh，每个类别的置信度
+	this->num_proposal = output_node_dims[0][1];  // 预测到的类别数
  
 }
- 
+
+
+//resize输入大小，yolo要求是正方形
 Mat YOLOv5::resize_image(Mat srcimg, int *newh, int *neww, int *top, int *left)
 {
 	int srch = srcimg.rows, srcw = srcimg.cols;
@@ -156,6 +162,8 @@ Mat YOLOv5::resize_image(Mat srcimg, int *newh, int *neww, int *top, int *left)
 	return dstimg;
 }
  
+
+//输入中心归一化
 void YOLOv5::normalize_(Mat img)
 {
 	//    img.convertTo(img, CV_32F);
@@ -176,6 +184,9 @@ void YOLOv5::normalize_(Mat img)
 	}
 }
  
+
+
+//非极大值抑制
 void YOLOv5::nms(vector<BoxInfo>& input_boxes)
 {
 	sort(input_boxes.begin(), input_boxes.end(), [](BoxInfo a, BoxInfo b) { return a.score > b.score; }); // 降序排列
@@ -216,11 +227,16 @@ void YOLOv5::nms(vector<BoxInfo>& input_boxes)
 	input_boxes.erase(remove_if(input_boxes.begin(), input_boxes.end(), [&idx_t, &isSuppressed](const BoxInfo& f) { return isSuppressed[idx_t++]; }), input_boxes.end());
 }
  
+
+
+//探测，主要是运行模型并绘制图像
 void YOLOv5::detect(Mat& frame)
 {
 	int newh = 0, neww = 0, padh = 0, padw = 0;
-	Mat dstimg = this->resize_image(frame, &newh, &neww, &padh, &padw);
+	Mat dstimg = this->resize_image(frame, &newh, &neww, &padh, &padw);//resize同时会把上面四个量初始化为frame的大小
 	this->normalize_(dstimg);
+
+
 	// 定义一个输入矩阵，int64_t是下面作为输入参数时的类型
 	array<int64_t, 4> input_shape_{ 1, 3, this->inpHeight, this->inpWidth };
  
@@ -230,15 +246,19 @@ void YOLOv5::detect(Mat& frame)
  
 	// 开始推理
 	vector<Value> ort_outputs = ort_session->Run(RunOptions{ nullptr }, &input_names[0], &input_tensor_, 1, output_names.data(), output_names.size());   // 开始推理
-	//generate proposals
+	
+	
+	
+	
+	//按阈值输出并进行非极大值抑制
 	vector<BoxInfo> generate_boxes;  // BoxInfo自定义的结构体
 	float ratioh = (float)frame.rows / newh, ratiow = (float)frame.cols / neww;
 	float* pdata = ort_outputs[0].GetTensorMutableData<float>(); // GetTensorMutableData
 	for(int i = 0; i < num_proposal; ++i) // 遍历所有的num_pre_boxes
 	{
-		int index = i * nout;      // prob[b*num_pred_boxes*(classes+5)]  
-		float obj_conf = pdata[index + 4];  // 置信度分数
-		if (obj_conf > this->objThreshold)  // 大于阈值
+		int index = i * nout;      // 一个数据帧长度为nout
+		float obj_conf = pdata[index + 4];  // 全局置信度分数（第一次筛选）
+		if (obj_conf > this->objThreshold)  // 大于全局阈值
 		{
 			int class_idx = 0;
 			float max_class_socre = 0;
@@ -250,10 +270,11 @@ void YOLOv5::detect(Mat& frame)
 					class_idx = k;
 				}
 			}
-			max_class_socre *= obj_conf;   // 最大的类别分数*置信度
+			max_class_socre *= obj_conf;   // 最大的类别置信度
+
+
 			if (max_class_socre > this->confThreshold) // 再次筛选
 			{ 
-				//const int class_idx = classIdPoint.x;
 				float cx = pdata[index];  //x
 				float cy = pdata[index+1];  //y
 				float w = pdata[index+2];  //w
@@ -270,6 +291,9 @@ void YOLOv5::detect(Mat& frame)
 	}
  
 	nms(generate_boxes);//非极大值抑制
+
+
+	//绘制
 	for (size_t i = 0; i < generate_boxes.size(); ++i)
 	{
 		int xmin = int(generate_boxes[i].x1);
