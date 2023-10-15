@@ -69,28 +69,28 @@ include CMakeFiles/test.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/test.dir/flags.make
 
-CMakeFiles/test.dir/onnx_detect.cpp.o: CMakeFiles/test.dir/flags.make
-CMakeFiles/test.dir/onnx_detect.cpp.o: /home/bacid/文档/code/10.5/onnx_detect.cpp
-CMakeFiles/test.dir/onnx_detect.cpp.o: CMakeFiles/test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bacid/文档/code/10.5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test.dir/onnx_detect.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/test.dir/onnx_detect.cpp.o -MF CMakeFiles/test.dir/onnx_detect.cpp.o.d -o CMakeFiles/test.dir/onnx_detect.cpp.o -c /home/bacid/文档/code/10.5/onnx_detect.cpp
+CMakeFiles/test.dir/yolodetect.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/yolodetect.cpp.o: /home/bacid/文档/code/10.5/yolodetect.cpp
+CMakeFiles/test.dir/yolodetect.cpp.o: CMakeFiles/test.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bacid/文档/code/10.5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test.dir/yolodetect.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/test.dir/yolodetect.cpp.o -MF CMakeFiles/test.dir/yolodetect.cpp.o.d -o CMakeFiles/test.dir/yolodetect.cpp.o -c /home/bacid/文档/code/10.5/yolodetect.cpp
 
-CMakeFiles/test.dir/onnx_detect.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/onnx_detect.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bacid/文档/code/10.5/onnx_detect.cpp > CMakeFiles/test.dir/onnx_detect.cpp.i
+CMakeFiles/test.dir/yolodetect.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/yolodetect.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bacid/文档/code/10.5/yolodetect.cpp > CMakeFiles/test.dir/yolodetect.cpp.i
 
-CMakeFiles/test.dir/onnx_detect.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/onnx_detect.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bacid/文档/code/10.5/onnx_detect.cpp -o CMakeFiles/test.dir/onnx_detect.cpp.s
+CMakeFiles/test.dir/yolodetect.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/yolodetect.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bacid/文档/code/10.5/yolodetect.cpp -o CMakeFiles/test.dir/yolodetect.cpp.s
 
 # Object files for target test
 test_OBJECTS = \
-"CMakeFiles/test.dir/onnx_detect.cpp.o"
+"CMakeFiles/test.dir/yolodetect.cpp.o"
 
 # External object files for target test
 test_EXTERNAL_OBJECTS =
 
-/home/bacid/文档/code/10.5/test: CMakeFiles/test.dir/onnx_detect.cpp.o
+/home/bacid/文档/code/10.5/test: CMakeFiles/test.dir/yolodetect.cpp.o
 /home/bacid/文档/code/10.5/test: CMakeFiles/test.dir/build.make
 /home/bacid/文档/code/10.5/test: /usr/local/lib/libopencv_highgui.so.4.7.0
 /home/bacid/文档/code/10.5/test: /usr/local/lib/libopencv_ml.so.4.7.0

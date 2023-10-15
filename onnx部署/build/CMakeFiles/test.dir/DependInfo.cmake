@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/bacid/文档/code/10.5/onnx_detect.cpp" "CMakeFiles/test.dir/onnx_detect.cpp.o" "gcc" "CMakeFiles/test.dir/onnx_detect.cpp.o.d"
+  "/home/bacid/文档/code/10.5/yolodetect.cpp" "CMakeFiles/test.dir/yolodetect.cpp.o" "gcc" "CMakeFiles/test.dir/yolodetect.cpp.o.d"
   )
 
 # Targets to which this target links.

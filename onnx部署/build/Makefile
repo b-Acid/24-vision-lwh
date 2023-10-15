@@ -117,41 +117,41 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test
+# Target rules for targets named yolotest
 
 # Build rule for target.
-test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test
-.PHONY : test
+yolotest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 yolotest
+.PHONY : yolotest
 
 # fast build rule for target.
-test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
-.PHONY : test/fast
+yolotest/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yolotest.dir/build.make CMakeFiles/yolotest.dir/build
+.PHONY : yolotest/fast
 
-onnx_detect.o: onnx_detect.cpp.o
-.PHONY : onnx_detect.o
+yolodetect.o: yolodetect.cpp.o
+.PHONY : yolodetect.o
 
 # target to build an object file
-onnx_detect.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/onnx_detect.cpp.o
-.PHONY : onnx_detect.cpp.o
+yolodetect.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yolotest.dir/build.make CMakeFiles/yolotest.dir/yolodetect.cpp.o
+.PHONY : yolodetect.cpp.o
 
-onnx_detect.i: onnx_detect.cpp.i
-.PHONY : onnx_detect.i
+yolodetect.i: yolodetect.cpp.i
+.PHONY : yolodetect.i
 
 # target to preprocess a source file
-onnx_detect.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/onnx_detect.cpp.i
-.PHONY : onnx_detect.cpp.i
+yolodetect.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yolotest.dir/build.make CMakeFiles/yolotest.dir/yolodetect.cpp.i
+.PHONY : yolodetect.cpp.i
 
-onnx_detect.s: onnx_detect.cpp.s
-.PHONY : onnx_detect.s
+yolodetect.s: yolodetect.cpp.s
+.PHONY : yolodetect.s
 
 # target to generate assembly for a file
-onnx_detect.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/onnx_detect.cpp.s
-.PHONY : onnx_detect.cpp.s
+yolodetect.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yolotest.dir/build.make CMakeFiles/yolotest.dir/yolodetect.cpp.s
+.PHONY : yolodetect.cpp.s
 
 # Help Target
 help:
@@ -161,10 +161,10 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... test"
-	@echo "... onnx_detect.o"
-	@echo "... onnx_detect.i"
-	@echo "... onnx_detect.s"
+	@echo "... yolotest"
+	@echo "... yolodetect.o"
+	@echo "... yolodetect.i"
+	@echo "... yolodetect.s"
 .PHONY : help
 
 

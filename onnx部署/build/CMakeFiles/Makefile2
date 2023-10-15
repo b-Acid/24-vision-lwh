@@ -63,7 +63,7 @@ CMAKE_BINARY_DIR = /home/bacid/文档/code/10.5/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/test.dir/all
+all: CMakeFiles/yolotest.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -71,34 +71,34 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/test.dir/clean
+clean: CMakeFiles/yolotest.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/test.dir
+# Target rules for target CMakeFiles/yolotest.dir
 
 # All Build rule for target.
-CMakeFiles/test.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/bacid/文档/code/10.5/build/CMakeFiles --progress-num=1,2 "Built target test"
-.PHONY : CMakeFiles/test.dir/all
+CMakeFiles/yolotest.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yolotest.dir/build.make CMakeFiles/yolotest.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yolotest.dir/build.make CMakeFiles/yolotest.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/bacid/文档/code/10.5/build/CMakeFiles --progress-num=1,2 "Built target yolotest"
+.PHONY : CMakeFiles/yolotest.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/test.dir/rule: cmake_check_build_system
+CMakeFiles/yolotest.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/bacid/文档/code/10.5/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/yolotest.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/bacid/文档/code/10.5/build/CMakeFiles 0
-.PHONY : CMakeFiles/test.dir/rule
+.PHONY : CMakeFiles/yolotest.dir/rule
 
 # Convenience name for target.
-test: CMakeFiles/test.dir/rule
-.PHONY : test
+yolotest: CMakeFiles/yolotest.dir/rule
+.PHONY : yolotest
 
 # clean rule for target.
-CMakeFiles/test.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/clean
-.PHONY : CMakeFiles/test.dir/clean
+CMakeFiles/yolotest.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/yolotest.dir/build.make CMakeFiles/yolotest.dir/clean
+.PHONY : CMakeFiles/yolotest.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
