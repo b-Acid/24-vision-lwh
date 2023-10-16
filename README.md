@@ -16,3 +16,4 @@
 
 ## 5.[onnx部署模型任务](https://github.com/b-Acid/24-vision-lwh/tree/main/onnx%E9%83%A8%E7%BD%B2)
 + 使用onnx-python将模型转化为onnx模式，并使用onnx-simplifier进行简化。用onnxruntime在c++中部署onnx模型。这里使用的是基于wideface数据集训练的只检测人脸的yolov5模型。使用的onnxruntime版本是linux-gpu1.16.0。使用的pytorch和cuda版本同任务2。onnx部署任务文件夹下的README.md里有部署模型的全过程。
+## 6.[点云投影任务](https://github.com/b-Acid/24-vision-lwh/tree/main/%E7%82%B9%E4%BA%91%E6%8A%95%E5%BD%B1%E4%BB%BB%E5%8A%A1)
