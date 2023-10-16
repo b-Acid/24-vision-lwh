@@ -1,4 +1,5 @@
 # 24-vision-lwh
+华南虎机器人实验室视觉组实习任务
 
 ##  1.[装甲板识别](https://github.com/b-Acid/24-vision-lwh/tree/main/%E8%A3%85%E7%94%B2%E6%9D%BF%E8%AF%86%E5%88%AB)
 + 基于OpenCV 4.7.0，通过轮廓检测，pnp等方法，实现了对装甲板的检测和姿态解算。
