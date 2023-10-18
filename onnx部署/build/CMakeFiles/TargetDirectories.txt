@@ -1,3 +1,0 @@
-/home/bacid/文档/code/10.5/build/CMakeFiles/yolotest.dir
-/home/bacid/文档/code/10.5/build/CMakeFiles/edit_cache.dir
-/home/bacid/文档/code/10.5/build/CMakeFiles/rebuild_cache.dir

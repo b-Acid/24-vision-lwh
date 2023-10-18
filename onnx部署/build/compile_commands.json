@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/bacid/文档/code/10.5/build",
-  "command": "/usr/bin/g++  -I/home/bacid/文档/onnxruntime/include/onnxruntime -I/home/bacid/文档/onnxruntime/onnxruntime -I/home/bacid/文档/onnxruntime/include/onnxruntime/core/session -I/home/bacid/文档/onnxruntime/include/onnxruntime/core/providers/cuda -isystem /usr/local/include/opencv4 -g -o CMakeFiles/yolotest.dir/yolodetect.cpp.o -c /home/bacid/文档/code/10.5/yolodetect.cpp",
-  "file": "/home/bacid/文档/code/10.5/yolodetect.cpp"
-}
-]
