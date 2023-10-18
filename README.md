@@ -13,7 +13,7 @@
 
 ### 4.[Cmake I任务（也有Cmake II）](https://github.com/b-Acid/24-vision-lwh/tree/main/Cmake%E4%BB%BB%E5%8A%A1)
 
-+ 首先在子文件夹编写CMakeLists.txt，将子目录里的程序编译成静态库，之后在主目录的CMakeLists.txt指定了所有头文件的路径和要链接的静态库，完成主函数的编译。
++ 首先在子文件夹编写CMakeLists.txt，将子目录里的程序编译成静态库，之后在主目录的CMakeLists.txt指定了所有头文件的路径和要链接的库，完成主函数的编译。
 
 ### 5.[onnx部署模型任务](https://github.com/b-Acid/24-vision-lwh/tree/main/onnx%E9%83%A8%E7%BD%B2)
 + 使用onnx-python将模型转化为onnx模式，并使用onnx-simplifier进行简化。用onnxruntime在c++中部署onnx模型。这里使用的是基于wideface数据集训练的只检测人脸的yolov5模型。使用的onnxruntime版本是linux-gpu1.16.0。使用的pytorch和cuda版本同任务2。RTX3060上部署yolov5模型推理320*320的图片耗时1ms左右。
