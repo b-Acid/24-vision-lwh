@@ -26,7 +26,7 @@ CameraMat=\left[
   \right] 
 $$
 
-+ 世界坐标下的点 $[Xw,Yw,Zw]$ 扩维后化为列向量 $[Xw,Yw,Zw,1]^T $，左乘外参矩阵 $CameraExtrinsicMat$ 得到扩维相机坐标 $[Xc,Yc,Zc,1]$。
++ 世界坐标下的点 $[Xw,Yw,Zw]$ 扩维后化为列向量 $[Xw,Yw,Zw,1]^T $,左乘外参矩阵 $CameraExtrinsicMat$ 得到相机坐标 $[Xc,Yc,Zc,1]$ 。
 + 相机坐标 $[Xc,Yc,Zc]$ 左乘内参矩阵$ CameraMat $再除以z轴深度Zc得到像素矩阵 $[u,v,1]$。
 + 依据深度信息对不同的世界点描绘不同大小的像素点。
 + 效果见如下：
