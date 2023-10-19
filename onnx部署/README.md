@@ -141,3 +141,8 @@
 ### 效果图
     
 ![](https://github.com/b-Acid/24-vision-lwh/blob/main/onnx%E9%83%A8%E7%BD%B2/output.png?raw=true)
+
+
+### 用同样的方式部署装甲板识别模型
++ 只需更改模型的输入输出维度和大小即可,具体改动见classify.cpp。效果如下：
+  ![](https://github.com/b-Acid/24-vision-lwh/blob/main/onnx%E9%83%A8%E7%BD%B2/example.png?raw=true)
