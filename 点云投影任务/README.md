@@ -27,7 +27,7 @@ CameraMat=\left[
 $$
 
 + 世界坐标下的点 $[Xw,Yw,Zw]$ 扩维后化为列向量 $[Xw,Yw,Zw,1]^T $,左乘外参矩阵 $CameraExtrinsicMat$ 得到相机坐标 $[Xc,Yc,Zc,1]$ 。
-+ 相机坐标 $[Xc,Yc,Zc]$ 左乘内参矩阵$ CameraMat $再除以z轴深度Zc得到像素矩阵 $[u,v,1]$。
++ 相机坐标 $[Xc,Yc,Zc]$ 左乘内参矩阵 $CameraMat$ 再除以z轴深度Zc得到像素矩阵 $[u,v,1]$。
 + 依据深度信息对不同的世界点描绘不同大小的像素点。
 + 效果见如下：
 ![](https://github.com/b-Acid/24-vision-lwh/blob/main/%E7%82%B9%E4%BA%91%E6%8A%95%E5%BD%B1%E4%BB%BB%E5%8A%A1/outputs/one/cloud_2.jpg?raw=true)
