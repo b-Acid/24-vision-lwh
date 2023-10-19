@@ -114,7 +114,7 @@
    	vector<vector<int64_t>> output_node_dims; // >=1 outputs维度
    };
    ```
-   + 这步定义了模型运行的基本配置，注释标明得很清楚了。
+   + 这步定义了模型运行的基本配置，包括使用Configuration类来初始化YOLOv5类，注释里有详细标明。
 3. session类的配置
    ```c++
    string model_path = config.modelpath;//模型路径
