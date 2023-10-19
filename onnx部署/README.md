@@ -57,3 +57,86 @@
 2. 得到的.onnx文件就可以调用onnxruntime的api在c++中部署了。
 
 ### 模型的部署
++ 本例中创建了两个可执行文件，分别调用了原生的yolov5s.onnc模型（识别80个类）和自己训练的best.onnx模型(只识别人脸),两者过程基本一致。
+1. Configuration类
+   
+   ```c++
+   struct Configuration
+   {
+   	public: 
+   	float confThreshold; // Confidence threshold
+   	float nmsThreshold;  // Non-maximum suppression threshold
+   	float objThreshold;  //Object Confidence threshold
+   	string modelpath; //模型路径
+   }
+   ```
+   + 这个类指明了模型的路径和一些阈值。
+    
+2. yolov5类
+   
+   ```c++
+   //yolov5类
+   class YOLOv5
+   {
+   public:
+   	YOLOv5(Configuration config);
+   	void detect(Mat& frame);
+   private:
+   	float confThreshold;
+   	float nmsThreshold;
+   	float objThreshold;//三个配置量，也就是三个阈值
+   	int inpWidth;
+   	int inpHeight;//输入长宽
+   	int nout;//输出的数据帧长度，对象中心xy，长宽wh，全局置信度（是一个对象的置信度），每个类别的置信度
+   	int num_proposal;//探测到的类box数
+   	int num_classes;//所有类别，也就是下面这些
+   	string classes[1] = {"face"};
+    
+   	vector<float> input_image_;	// 输入图片
+   	void normalize_(Mat img);		// 归一化函数
+   	void nms(vector<BoxInfo>& input_boxes);  //非极大值抑制函数
+   	Mat resize_image(Mat srcimg, int *newh, int *neww, int *top, int *left);//resize图片为模型输入大小
+    
+   	Env env = Env(ORT_LOGGING_LEVEL_ERROR, "yolov5-6.1"); // 初始化环境
+   	Session *ort_session = nullptr;    // 初始化Session指针
+   	SessionOptions sessionOptions = SessionOptions();  //初始化Session对象用的配置类
+   	vector<char*> input_names;  // 定义一个字符指针vector
+   	vector<char*> output_names; // 定义一个字符指针vector
+   	vector<vector<int64_t>> input_node_dims; // >=1 inputs维度 
+   	vector<vector<int64_t>> output_node_dims; // >=1 outputs维度
+   };
+   ```
+   + 这步定义了模型运行的基本配置，注释标明得很清楚了。
+3. session类的配置
+   ```c++
+   string model_path = config.modelpath;//模型路径
+ 
+   //CUDA设置
+   OrtCUDAProviderOptions cuda_options{
+          0,
+          OrtCudnnConvAlgoSearch::EXHAUSTIVE,
+          std::numeric_limits<size_t>::max()/10,
+          0,
+          true
+      };
+   sessionOptions.AppendExecutionProvider_CUDA(cuda_options);
+   sessionOptions.SetGraphOptimizationLevel(ORT_ENABLE_BASIC);  //设置图优化类型
+   ort_session = new Session(env, (const char*)model_path.c_str(), sessionOptions);//应用设置
+   ```
+4. 推理过程
+   ```c++
+   array<int64_t, 4> input_shape_{ 1, 3, this->inpHeight, this->inpWidth };
+ 
+    //创建输入tensor
+	auto allocator_info = MemoryInfo::CreateCpu(OrtDeviceAllocator, OrtMemTypeCPU);
+	Value input_tensor_ = Value::CreateTensor<float>(allocator_info,
+                            input_image_.data(), input_image_.size(), input_shape_.data(), input_shape_.size());
+ 
+	// 开始推理
+	vector<Value> ort_outputs = ort_session->Run(RunOptions{ nullptr }, &input_names[0], &input_tensor_, 1, output_names.data(), output_names.size());   // 开始推理
+   ```
+   + 这步便得到了输出的张量了，在yolov5s原生模型中ort_outputs是1*25000*85大小，在我的人脸识别模型中则为1*6000*6大小。第二维是所有预测的bounding-box的数量，第三维前两项是位置，  第三第四项是大小，第五项是置信度，后面是目标属于每类的分数。
+   + 这里的ort_outputs是一维vector数组，一定要按照低维到高纬的顺序读取。读取到了数据后就可以非极大值抑制并画框了。
+### 效果图
+    
+
