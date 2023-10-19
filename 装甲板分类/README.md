@@ -182,3 +182,6 @@ imshow(image1,title="PRED:{},TRUE:{}".format(preds,filename[0]))
 ```
 
 ![识别效果图](https://github.com/b-Acid/Images/blob/main/output.png?raw=true)
+
+
+#### 模型的onnxruntime部署见onnx部署仓库
