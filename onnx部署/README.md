@@ -139,4 +139,4 @@
    + 这里的ort_outputs是一维vector数组，一定要按照低维到高纬的顺序读取。读取到了数据后就可以非极大值抑制并画框了。
 ### 效果图
     
-
+![](https://github.com/b-Acid/24-vision-lwh/blob/main/onnx%E9%83%A8%E7%BD%B2/output.png?raw=true)
