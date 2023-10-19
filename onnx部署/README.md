@@ -1,4 +1,4 @@
-# ONNXRUNTIME部署yolov5实现人脸检测
+# ONNXRUNTIME部署yolov5模型和装甲板检测模型
 ###
 + 使用说明
 ```
@@ -6,6 +6,7 @@
 ./facedetect filename(video)
 ./yolodetect filename(video)
 ```
++ 编译时修改CMakeLists.txt里的onnxruntime的头文件和库的路径为自己电脑上的路径。
 ### ONNXRUNTIME安装
 1. 这里直接选择官网下载源码编译，这里下载[onnxruntime1.8.0](https://github.com/microsoft/onnxruntime/releases/tag/v1.8.0),找到assert里的source code点击下载。
 2. 解压缩包，运行build.sh，等待编译完成。
