@@ -13,6 +13,13 @@ set(ONNXRUNTIME_LIB ${ONNXRUNTIME_ROOT_PATH}/build/Linux/Release/libonnxruntime.
 include_directories(${ONNXRUNTIME_INCLUDE_DIRS})
 
 set(EXECUTABLE_OUTPUT_PATH ../)
+
+add_executable(facetest "facedetect.cpp")
+target_link_libraries(facetest ${OpenCV_LIBS} ${ONNXRUNTIME_LIB})
+
 add_executable(yolotest "yolodetect.cpp")
 target_link_libraries(yolotest ${OpenCV_LIBS} ${ONNXRUNTIME_LIB})
+
+add_executable(classify "classify.cpp")
+target_link_libraries(classify ${OpenCV_LIBS} ${ONNXRUNTIME_LIB})
 
