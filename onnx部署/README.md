@@ -1,5 +1,8 @@
 # ONNXRUNTIME部署yolov5实现人脸检测
 ### ONNXRUNTIME安装
+1. 这里直接选择官网下载源码编译，这里下载[onnxruntime1.8.0](https://github.com/microsoft/onnxruntime/releases/tag/v1.8.0),找到assert里的source code点击下载。
+2. 解压缩包，运行build.sh，等待编译完成。
+3. 记住文件夹的路径，接下来的c++部署里要使用onnxruntime库。
 ### 模型的训练
 1. 从github上克隆官方仓库，这里选择的是yolov5-6.0。
 2. 下载数据集，这里选择的是[wider face数据集](http://shuoyang1213.me/WIDERFACE/)中的7900张图片。
@@ -42,6 +45,7 @@
     python train.py --data data/face.yaml --epochs 20 --img 320
     ```
     + 等待训练完成，训练好的模型和训练日志会被保存到run文件夹内。保存的模型为.pt格式，训练时的一些数据会以图表形式保存在相同目录下。
+    + 可能会弹出警告，提示大量目标的大小宽度小于5像素，这个直接不用管。
       
 
 ### 模型的转化
@@ -51,3 +55,5 @@
   python export.py --weights best.pt --include onnx --simplify
   ```
 2. 得到的.onnx文件就可以调用onnxruntime的api在c++中部署了。
+
+### 模型的部署
