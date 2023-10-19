@@ -135,7 +135,7 @@
 	// 开始推理
 	vector<Value> ort_outputs = ort_session->Run(RunOptions{ nullptr }, &input_names[0], &input_tensor_, 1, output_names.data(), output_names.size());   // 开始推理
    ```
-   + 这步便得到了输出的张量了，在yolov5s原生模型中ort_outputs是1*25000*85大小，在我的人脸识别模型中则为1*6000*6大小。第二维是所有预测的bounding-box的数量，第三维前两项是位置，  第三第四项是大小，第五项是置信度，后面是目标属于每类的分数。
+   + 这步便得到了输出的张量了，在yolov5s原生模型中ort_outputs是 1 * 25000 * 85  大小，在我的人脸识别模型中则为 1 * 6000 * 6 大小。第二维是所有预测的bounding-box的数量，第三维前两项是位置，  第三第四项是大小，第五项是置信度，后面是目标属于每类的分数。
    + 这里的ort_outputs是一维vector数组，一定要按照低维到高纬的顺序读取。读取到了数据后就可以非极大值抑制并画框了。
 ### 效果图
     
