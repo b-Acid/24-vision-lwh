@@ -74,19 +74,5 @@ make -j6
 
 #### 运行效果
 
-+ server程序首先输出：ass = [1.2, 3.4]，过两秒打印一大堆信息
-
-  + 如果在 cmake-gui 一步，关闭 BUILD_A，打开 BUILD_B，改动顶层 CMakeLists.txt 的 `target_link_libraries` 后的效果为
-
-    ass = [1.2, 3.4]
-
-  + 如果在 cmake-gui 一步，打开 BUILD_A，关闭 BUILD_B，改动顶层 CMakeLists.txt 的 `target_link_libraries` 后的效果为 
-
-    module1a 1
-    module1a 2
-    module1a 3
-    module1a 4
-
-+ client程序首先输出：31.1127，过两秒打印一大堆信息后退出
-
-  + 31.1127 为 server 程序中的 `getDistances(Point(11, 22), Point(33, 44)` 的结果，添加至服务器后，客户端订阅了该变量节点，输出结果
++ ![](https://github.com/b-Acid/24-vision-lwh/blob/main/Cmake%E4%BB%BB%E5%8A%A1/CMake_II-master/2.jpg?raw=true)
++ ![](https://github.com/b-Acid/24-vision-lwh/blob/main/Cmake%E4%BB%BB%E5%8A%A1/CMake_II-master/1.jpg?raw=true)
