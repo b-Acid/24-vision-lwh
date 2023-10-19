@@ -1,4 +1,11 @@
 # ONNXRUNTIME部署yolov5实现人脸检测
+###
++ 使用说明
+```
+./classify filename(image)
+./facedetect filename(video)
+./yolodetect filename(video)
+```
 ### ONNXRUNTIME安装
 1. 这里直接选择官网下载源码编译，这里下载[onnxruntime1.8.0](https://github.com/microsoft/onnxruntime/releases/tag/v1.8.0),找到assert里的source code点击下载。
 2. 解压缩包，运行build.sh，等待编译完成。
@@ -57,7 +64,7 @@
 2. 得到的.onnx文件就可以调用onnxruntime的api在c++中部署了。
 
 ### 模型的部署
-+ 本例中创建了两个可执行文件，分别调用了原生的yolov5s.onnc模型（识别80个类）和自己训练的best.onnx模型(只识别人脸),两者过程基本一致。
++ 本例中创建了两个可执行文件，分别调用了原生的yolov5s.onnx模型（识别80个类）和自己训练的best.onnx模型(只识别人脸),两者过程基本一致。
 1. Configuration类
    
    ```c++
