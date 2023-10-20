@@ -53,4 +53,4 @@ for i in range(PixPoint.shape[0]):
 + 
   
 ### 效果：
-![](https://github.com/b-Acid/24-vision-lwh/blob/main/%E7%82%B9%E4%BA%91%E6%8A%95%E5%BD%B1%E4%BB%BB%E5%8A%A1/outputs/one/cloud_2.jpg?raw=true)
+![](https://github.com/b-Acid/Images/blob/main/%E7%82%B9%E4%BA%91%E8%BE%93%E5%87%BA%E5%9B%BE%E7%89%87/one/cloud_2.jpg?raw=true)
