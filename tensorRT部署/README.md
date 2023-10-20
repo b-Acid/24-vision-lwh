@@ -83,4 +83,4 @@ cudaStreamSynchronize(stream);
 + 现在输出数据保存在output里，按照face.engine，它的大小为1 * 3600 * 6。现在可以依次读出3600个boudingbox的6个数据，进行非极大值抑制，然后完成绘图。
 
 6. 效果图
-+ ![](https://github.com/b-Acid/24-vision-lwh/blob/main/tensorRT%E9%83%A8%E7%BD%B2/out-1.png?raw=true)
++ ![](https://github.com/b-Acid/Images/blob/main/tensorRT%E4%BB%BB%E5%8A%A1/out-1.png?raw=true)
