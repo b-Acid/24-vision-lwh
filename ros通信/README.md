@@ -71,6 +71,7 @@ catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3
 source devel/setup.bash
 roslaunch camera_driver camera.launch 
 ```
-+ 这时摄像头灯光打开，摄像头开始运行，涂香香通过camera_node发布出来。
-+ 输入$ rostopic list看下哪些topic正在发布，可以看到刚刚打开的话题image正在运行。
++ 这时摄像头灯光打开，摄像头开始运行，图像信息通过camera_node发布出来。
++ 输入 rostopic list看下哪些topic正在发布，可以看到刚刚打开的话题image正在运行。
+  ![](https://github.com/b-Acid/Images/blob/main/ros%E9%80%9A%E4%BF%A1/111.png?raw=true)
 + 现在在其他ros程序上就可以订阅这个话题，接收到摄像头信息了。
