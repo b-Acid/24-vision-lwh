@@ -74,5 +74,5 @@ make -j6
 
 #### 运行效果
 
-+ ![](https://github.com/b-Acid/24-vision-lwh/blob/main/Cmake%E4%BB%BB%E5%8A%A1/CMake_II-master/2.jpg?raw=true)
-+ ![](https://github.com/b-Acid/24-vision-lwh/blob/main/Cmake%E4%BB%BB%E5%8A%A1/CMake_II-master/1.jpg?raw=true)
++ ![](https://github.com/b-Acid/Images/blob/main/cmake2/2.jpg?raw=true)
++ ![](https://github.com/b-Acid/Images/blob/main/cmake2/1.jpg?raw=true)
