@@ -182,7 +182,7 @@ print("Prediction:"+str(preds)+",True:"+filename[0])
 imshow(image1,title="PRED:{},TRUE:{}".format(preds,filename[0]))
 ```
 
-![识别效果图](https://github.com/b-Acid/Images/blob/main/output.png?raw=true)
+![识别效果图](https://github.com/b-Acid/Images/blob/main/%E8%A3%85%E7%94%B2%E6%9D%BF%E5%88%86%E7%B1%BB/output.png?raw=true)
 
 
 #### [模型的onnxruntime部署见onnx部署仓库](https://github.com/b-Acid/24-vision-lwh/tree/main/onnx%E9%83%A8%E7%BD%B2)
