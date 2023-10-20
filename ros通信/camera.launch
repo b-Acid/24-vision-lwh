@@ -1,7 +1,7 @@
 <launch>
      <node pkg="camera_driver" type="camera_node.py" name="camera_node" output="screen">
        <!-- 在此处添加相机参数 -->
-       <param name="camera_topic" type="string" value="/image_view/image_raw" />
+       <param name="camera_topic" type="string" value="image" />
        <param name="camera_resolution" type="string" value="640x480" />
        <param name="camera_fps" type="int" value="30" />
      </node>

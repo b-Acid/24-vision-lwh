@@ -8,7 +8,7 @@ from sensor_msgs.msg import Image
  
 if __name__ == '__main__':
     rospy.init_node("camera_node")
-    image_pub=rospy.Publisher('/image_view/image_raw', Image, queue_size = 1) #定义话题
+    image_pub=rospy.Publisher('image', Image, queue_size = 1) #定义话题
     rate = rospy.Rate(5)
     capture = cv2.VideoCapture(0)
     ros_frame = Image()
