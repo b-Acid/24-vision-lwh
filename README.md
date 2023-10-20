@@ -23,3 +23,6 @@
   
 ### 7.[点云投影任务](https://github.com/b-Acid/24-vision-lwh/tree/main/%E7%82%B9%E4%BA%91%E6%8A%95%E5%BD%B1%E4%BB%BB%E5%8A%A1)
 + 使用相机内外参矩阵将世界坐标中的点（x，y，z）投影到像素坐标上（u，v），绘制这些点构成点云，描绘背景轮廓。结果保存在outputs里。
+
+### 8.[ROS通信](https://github.com/b-Acid/24-vision-lwh/tree/main/ros%E9%80%9A%E4%BF%A1)
++ 使用ros新建了一个package为camera_driver,实现了创建一个名为camera_node的节点，该节点通过话题image发布。其他节点可以订阅image话题来获取摄像头画面。
