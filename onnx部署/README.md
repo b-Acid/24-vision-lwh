@@ -147,10 +147,10 @@
    + 这步便得到了输出的数组了，在yolov5s原生模型中ort_outputs[0]是 1 * 25000 * 85  大小，在我的人脸识别模型中则为 1 * 6000 * 6 大小。第二维是所有预测的bounding-box的数量，第三维前两项是位置，  第三第四项是大小，第五项是置信度，后面是目标属于每类的分数。
    + 这里的pdata是一维float数组，一定要按照低维到高纬的顺序读取。读取到了数据后就可以非极大值抑制并画框了。
 ### 效果图
-![](https://github.com/b-Acid/24-vision-lwh/blob/main/onnx%E9%83%A8%E7%BD%B2/example2.png?raw=true)
-![](https://github.com/b-Acid/24-vision-lwh/blob/main/onnx%E9%83%A8%E7%BD%B2/output.png?raw=true)
+![](https://github.com/b-Acid/Images/blob/main/onnx%E9%83%A8%E7%BD%B2/example2.png?raw=true)
+![](https://github.com/b-Acid/Images/blob/main/onnx%E9%83%A8%E7%BD%B2/output.png?raw=true)
 
 
 ### 用同样的方式部署装甲板识别模型
 + 只需更改模型的输入输出维度和大小即可,具体改动见classify.cpp。效果如下：
-  ![](https://github.com/b-Acid/24-vision-lwh/blob/main/onnx%E9%83%A8%E7%BD%B2/example1.png?raw=true)
+  ![](https://github.com/b-Acid/Images/blob/main/onnx%E9%83%A8%E7%BD%B2/example1.png?raw=true)
