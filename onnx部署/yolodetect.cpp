@@ -6,6 +6,9 @@
 #include <cuda_provider_factory.h>   // 提供cuda加速
 #include <onnxruntime_cxx_api.h>	 // C或c++的api
  
+//宏
+#define SHOW_IMG 0
+
 // 命名空间
 using namespace std;
 using namespace cv;
@@ -307,32 +310,40 @@ void YOLOv5::detect(Mat& frame)
  
 int main(int argc,char *argv[])
 {
-	clock_t startTime,endTime; //计算时间用的
-	VideoCapture cap("test.mp4");//"test.mp4"
+	clock_t startTime,endTime,STime,ETime; //计算时间用的
+	string filename=argv[1];
+	VideoCapture cap(filename);//"test.mp4"
 	Configuration yolo_nets = { 0.3, 0.5, 0.6,"yolov5s.onnx" };
 	YOLOv5 yolo_model(yolo_nets);
 	Mat srcimg ;
 	int Fps;
 	string s;
-	namedWindow("rusult", WINDOW_FREERATIO);
+	if (SHOW_IMG)
+	{
+		namedWindow("rusult", WINDOW_FREERATIO);
+	}
 
-
+	int framecount=cap.get(CAP_PROP_FRAME_COUNT);
 	VideoWriter writer;//写文件的类
         int codec=VideoWriter::fourcc('m','p','4','v');//输出视频格式
         double fps=30;//输出视频帧数
-        string name="output.mp4";//输出视频名称
+        string name="\""+filename+"\"-yolo-output.mp4";//输出视频名称
         cap>>srcimg;//读取视频一帧确定分辨率
         int frameH    = (int) srcimg.rows;
 	    int frameW    = (int) srcimg.cols; 
-        Point2d a = Point2d(0,frameH/2);
-        Point2d b = Point2d(frameW,frameH/2);
-        cout<<frameH<<frameW<<endl;
+        cout<<"Video size: "<<frameH<<" * "<<frameW<<endl;
+		cout<<"Frame counts: "<<framecount<<endl;
+		cout<<"Processing......"<<endl;
         writer.open(name,codec,fps,srcimg.size(),1);
 
 
 
-
-	while(waitKey(1)!=27)
+	STime = clock();//计时开始
+	cout.precision(3);
+	cout.width(50);
+	cout.fill(' ');
+	long i=2;
+	while(1)
 	{
 		cap>>srcimg;
 		if(srcimg.empty())break;
@@ -340,13 +351,40 @@ int main(int argc,char *argv[])
 		yolo_model.detect(srcimg);
 		endTime = clock();//计时结束
 		Fps = (int)(CLOCKS_PER_SEC / (double)(endTime - startTime));
-		//cout <<"   "<< Fps << "帧" << endl;
-        s = to_string(Fps)+"fps"+"      "+to_string((float)(1)/Fps);
-        putText(srcimg, s, Point(0, 25), FONT_HERSHEY_COMPLEX, 1.0, Scalar(255, 255, 255), 1, 8);
-		imshow("rusult",srcimg);
+        s = to_string(Fps)+"fps";
+        putText(srcimg, s, Point(0, 30), FONT_HERSHEY_COMPLEX, 1.0, Scalar(255, 255, 255), 1, 8);
+		s = to_string((float)(1)/Fps);+"s";
+        putText(srcimg, s, Point(0, 60), FONT_HERSHEY_COMPLEX, 1.0, Scalar(255, 255, 255), 1, 8);
+		if(SHOW_IMG)
+		{
+			imshow("rusult",srcimg);
+			if(waitKey(1)==27)break;
+		}
 		writer.write(srcimg);
+		if(i%(int)(framecount/30)==0)
+		{
+			
+			for(int j=0;j<70;j++)
+				cout<<"\b";
+			cout<<"[";
+			for(int j=0;j<int(30*i/framecount);j++)
+				cout<<"=";
+			for(int j=0;j<30-int(30*i/framecount);j++)
+				cout<<" ";
+			cout<<"]"<<100*float(i)/framecount<<"%";
+			ETime=clock();
+			cout<<"    Task ends in "<<(double(ETime-STime)/(CLOCKS_PER_SEC))/i*(framecount-i)<<"s    ";
+			fflush(stdout);
+		}
+		i++;
+	
 	}
 
+	ETime = clock();//计时结束
+	for(int j=0;j<60;j++)
+		cout<<"\b";
+	cout<<endl<<"All task done in "<<double(ETime-STime)/(CLOCKS_PER_SEC)<<" seconds!"<<endl;
+	cout<<"File has been saved to \"output.mp4\""<<endl;
 	cap.release();
 	writer.release();
 	destroyAllWindows();

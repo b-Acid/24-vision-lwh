@@ -6,6 +6,9 @@
 #include <cuda_provider_factory.h>   // 提供cuda加速
 #include <onnxruntime_cxx_api.h>	 // C或c++的api
  
+//宏
+#define SHOW_IMG 0
+
 // 命名空间
 using namespace std;
 using namespace cv;
@@ -46,22 +49,22 @@ private:
 	int inpHeight;//输入长宽
 	int nout;//输出的数据帧长度，对象中心xy，长宽wh，全局置信度（是一个对象的置信度），每个类别的置信度
 	int num_proposal;//探测到的类box数
-	int num_classes;//所有类别，也就是下面这80个
+	int num_classes;//所有类别，也就是下面这些
 	string classes[1] = {"face"};
  
 	const bool keep_ratio = true;
 	vector<float> input_image_;		// 输入图片
 	void normalize_(Mat img);		// 归一化函数
 	void nms(vector<BoxInfo>& input_boxes);  //非极大值抑制函数
-	Mat resize_image(Mat srcimg, int *newh, int *neww, int *top, int *left);//resize输入函数
+	Mat resize_image(Mat srcimg, int *newh, int *neww, int *top, int *left);//resize图片为模型输入大小
  
 	Env env = Env(ORT_LOGGING_LEVEL_ERROR, "yolov5-6.1"); // 初始化环境
 	Session *ort_session = nullptr;    // 初始化Session指针选项
-	SessionOptions sessionOptions = SessionOptions();  //初始化Session对象用的
+	SessionOptions sessionOptions = SessionOptions();  //初始化Session对象用的配置类
 	vector<char*> input_names;  // 定义一个字符指针vector
 	vector<char*> output_names; // 定义一个字符指针vector
-	vector<vector<int64_t>> input_node_dims; // >=1 outputs  ，二维vector
-	vector<vector<int64_t>> output_node_dims; // >=1 outputs ,int64_t C/C++标准
+	vector<vector<int64_t>> input_node_dims; // >=1 inputs维度 
+	vector<vector<int64_t>> output_node_dims; // >=1 outputs维度
 };
  
 
@@ -73,8 +76,8 @@ YOLOv5::YOLOv5(Configuration config)
 	this->nmsThreshold = config.nmsThreshold;
 	this->objThreshold = config.objThreshold;
 	this->num_classes = sizeof(this->classes)/sizeof(this->classes[0]);  // 类别数量
-	this->inpHeight = 180;
-	this->inpWidth = 180;//输入图片大小，可以调小点加速，也可以设置为原图大小
+	this->inpHeight = 320;
+	this->inpWidth = 320;//输入图片大小，可以调小点加速，也可以设置为原图大小
 	
 	string model_path = config.modelpath;//模型路径
  
@@ -82,7 +85,7 @@ YOLOv5::YOLOv5(Configuration config)
 	OrtCUDAProviderOptions cuda_options{
           0,
           OrtCudnnConvAlgoSearch::EXHAUSTIVE,
-          std::numeric_limits<size_t>::max()/2,
+          std::numeric_limits<size_t>::max()/10,
           0,
           true
       };
@@ -114,7 +117,7 @@ YOLOv5::YOLOv5(Configuration config)
 	this->inpHeight = input_node_dims[0][2];	//
 	this->inpWidth = input_node_dims[0][3];		//长宽
 	this->nout = output_node_dims[0][2];      //输出的数据帧长度
-	this->num_proposal = output_node_dims[0][1];  // 预测到的类别数
+	this->num_proposal = output_node_dims[0][1];  // 预测到的BOX数
  
 }
 
@@ -163,8 +166,8 @@ void YOLOv5::normalize_(Mat img)
 		{
 			for (int j = 0; j < col; j++)  // 列
 			{
-				float pix = img.ptr<uchar>(i)[j * 3 + 2 - c];  // Mat里的ptr函数访问任意一行像素的首地址,2-c:表示rgb
-				this->input_image_[c * row * col + i * col + j] = pix / 255.0;
+ 
+				this->input_image_[c * row * col + i * col + j] = img.ptr<uchar>(i)[j * 3 + 2 - c] / 255.0;// Mat里的ptr函数访问任意一行像素的首地址,2-c:表示rgb
  
 			}
 		}
@@ -292,32 +295,43 @@ void YOLOv5::detect(Mat& frame)
 	}
 }
  
-int main(int argc,char *argv[])
+int main(int argc,char **argv)
 {
-	clock_t startTime,endTime; //计算时间用的
-	VideoCapture cap("test.mp4");//"test.mp4"
+	clock_t startTime,endTime,STime,ETime; //计算时间用的
+	string filename=argv[1];
+	VideoCapture cap(filename);
 	Configuration yolo_nets = { 0.3, 0.5, 0.6,"best.onnx" };
 	YOLOv5 yolo_model(yolo_nets);
 	Mat srcimg ;
 	int Fps;
 	string s;
-	namedWindow("rusult", WINDOW_FREERATIO);
+	if (SHOW_IMG)
+	{
+		namedWindow("rusult", WINDOW_FREERATIO);
+	}
+	
+	
 
+	int framecount=cap.get(CAP_PROP_FRAME_COUNT);
 
 	VideoWriter writer;//写文件的类
         int codec=VideoWriter::fourcc('m','p','4','v');//输出视频格式
         double fps=30;//输出视频帧数
-        string name="face-output.mp4";//输出视频名称
+        string name="\""+filename+"\"-face-output.mp4";//输出视频名称
         cap>>srcimg;//读取视频一帧确定分辨率
         int frameH    = (int) srcimg.rows;
 	    int frameW    = (int) srcimg.cols;
-        cout<<frameH<<" * "<<frameW<<endl;
+        cout<<"Video size: "<<frameH<<" * "<<frameW<<endl;
+		cout<<"Frame counts: "<<framecount<<endl;
+		cout<<"Processing......"<<endl;
         writer.open(name,codec,fps,srcimg.size(),1);
 
-
-
-
-	while(waitKey(1)!=27)
+	STime = clock();//计时开始
+	cout.precision(3);
+	cout.width(50);
+	cout.fill(' ');
+	long i=2;
+	while(1)
 	{
 		cap>>srcimg;
 		if(srcimg.empty())break;
@@ -329,13 +343,37 @@ int main(int argc,char *argv[])
         putText(srcimg, s, Point(0, 30), FONT_HERSHEY_COMPLEX, 1.0, Scalar(255, 255, 255), 1, 8);
 		s = to_string((float)(1)/Fps);+"s";
         putText(srcimg, s, Point(0, 60), FONT_HERSHEY_COMPLEX, 1.0, Scalar(255, 255, 255), 1, 8);
-		imshow("rusult",srcimg);
-		
+		if(SHOW_IMG)
+		{
+			imshow("rusult",srcimg);
+			if(waitKey(1)==27)break;
+		}
 		writer.write(srcimg);
+		if(i%(int)(framecount/30)==0)
+		{
+			
+			for(int j=0;j<70;j++)
+				cout<<"\b";
+			cout<<"[";
+			for(int j=0;j<int(30*i/framecount);j++)
+				cout<<"=";
+			for(int j=0;j<30-int(30*i/framecount);j++)
+				cout<<" ";
+			cout<<"]"<<100*float(i)/framecount<<"%";
+			ETime=clock();
+			cout<<"    Task ends in "<<(double(ETime-STime)/(CLOCKS_PER_SEC))/i*(framecount-i)<<"s    ";
+			fflush(stdout);
+		}
+		i++;
 	}
-
+	ETime = clock();//计时结束
+	for(int j=0;j<60;j++)
+		cout<<"\b";
+	cout<<endl<<"All task done in "<<double(ETime-STime)/(CLOCKS_PER_SEC)<<" seconds!"<<endl;
+	cout<<"File has been saved to \"output.mp4\""<<endl;
 	cap.release();
 	writer.release();
 	destroyAllWindows();
 	return 0;
 }
+
